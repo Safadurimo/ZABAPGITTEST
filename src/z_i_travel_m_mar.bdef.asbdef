@@ -1,0 +1,55 @@
+managed; // implementation in class zbp_i_travel_m_mar unique;
+
+define behavior for Z_I_TRAVEL_M_Mar alias travel
+implementation in class z_bp_i_travel_m_mar unique
+persistent table /DMO/TRAVEL_M
+lock master
+//authorization master ( instance )
+etag master last_changed_at
+{
+
+
+
+  create;
+  update;
+  delete;
+
+  // mandatory fields that are required to create a travel
+  field (mandatory:create ) agency_id, overall_status, booking_fee, currency_code;
+  field (features : instance ) travel_id;
+
+  // instance action and dynamic action control
+   action  ( features: instance ) acceptTravel result [1] $self;
+   action  ( features: instance ) rejectTravel result [1] $self;
+
+     // validations
+  validation validateCustomer on save { field customer_id; }
+  validation validateDates    on save { field begin_date, end_date; }
+
+
+  // instance action and dynamic action control
+  // action  ( features: instance ) acceptTravel result [1] $self;
+  association _Booking { create; }
+}
+
+define behavior for Z_I_Booking_M_MAR alias booking
+implementation in class Z_BP_I_BOOKING_M_MAR unique
+persistent table /DMO/BOOKING_M
+lock dependent( travel_id = travel_id )
+//authorization dependent by <association>
+etag master last_changed_at
+{
+  update;
+  delete;
+  association _BookSupplement { create; }
+}
+
+define behavior for Z_I_BookSuppl_M_MAR alias booksuppl
+implementation in class Z_BP_I_BOOKINGSUPPLEMENT_M_MAR unique
+persistent table /DMO/BOOKSUPPL_M
+etag master last_changed_at
+lock dependent( travel_id = travel_id ) //authorization dependent( <local_field_name> = <target_field_name> )
+{
+  update;
+  delete;
+}

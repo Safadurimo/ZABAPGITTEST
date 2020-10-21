@@ -1,0 +1,89 @@
+implementation unmanaged;
+
+define behavior for Z_I_TRAVEL_U_Martin alias travel
+    implementation in class z_Bp_i_travel_u_mar
+//late numbering
+//lock master
+//etag master <field_name>
+{
+    field ( read only ) TravelID;
+  field ( mandatory ) AgencyID, CustomerID, BeginDate, EndDate;
+
+  create;
+  update;
+  delete;
+
+  action set_status_booked result [1] $self;
+
+  association _Booking { create; }
+
+  mapping for /dmo/travel
+  {
+    AgencyID = agency_id;
+    BeginDate = begin_date;
+    BookingFee = booking_fee;
+    CurrencyCode = currency_code;
+    CustomerID = customer_id;
+    EndDate = end_date;
+    LastChangedAt = lastchangedat;
+    Memo = description;
+    Status = status;
+    TotalPrice = total_price;
+    TravelID = travel_id;
+  }
+}
+
+define behavior for Z_I_BOOKING_U_MARTIN alias booking
+ implementation in class z_Bp_i_booking_u_mar
+//late numbering
+//lock dependent by <association>
+//etag master <field_name>
+{
+  field ( read only ) TravelID, BookingID;
+  field ( mandatory ) BookingDate, CustomerID, AirlineID, ConnectionID, FlightDate;
+
+  update;
+  delete;
+
+  association _BookSupplement abbreviation _Supplement { create; }
+  association _Travel;
+
+  mapping for /dmo/booking
+  {
+    AirlineID = carrier_id;
+    BookingDate = booking_date;
+    BookingID = booking_id;
+    ConnectionID = connection_id;
+    CurrencyCode = currency_code;
+    CustomerID = customer_id;
+    FlightDate = flight_date;
+    FlightPrice = flight_price;
+    TravelID = travel_id;
+  }
+}
+
+define behavior for Z_I_BOOKINGSUPPLEMENT_U_MARTIN alias bookingsupplement
+implementation in class z_Bp_i_bookingsupplement_u_mar
+//late numbering
+//lock dependent by <association>
+//etag master <field_name>
+{
+    field ( read only ) TravelID, BookingID, BookingSupplementID;
+  field ( mandatory ) SupplementID, Price;
+
+
+  update;
+  delete;
+
+  association _Travel;
+
+  mapping for /dmo/book_suppl
+  {
+    BookingID           = booking_id;
+    BookingSupplementID = booking_supplement_id;
+    CurrencyCode        = currency_code;
+    Price               = price;
+    SupplementID        = supplement_id;
+    TravelID            = travel_id;
+  }
+}

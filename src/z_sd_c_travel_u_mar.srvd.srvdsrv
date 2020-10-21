@@ -1,0 +1,6 @@
+@EndUserText.label: 'Z_SD_C_TRAVEL_U_MAR'
+define service Z_SD_C_TRAVEL_U_MAR {
+  expose Z_C_Travel_U_MAR as Travel;
+  expose Z_C_Booking_U_MAR as Booking;
+  expose Z_C_BookingSupplement_U_Mar as BookingSupplement;
+}

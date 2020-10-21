@@ -1,0 +1,5 @@
+CLASS z_bp_i_travel_m_mar DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF z_i_travel_m_mar.
+ENDCLASS.
+
+CLASS z_bp_i_travel_m_mar IMPLEMENTATION.
+ENDCLASS.

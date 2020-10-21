@@ -1,0 +1,31 @@
+projection;
+
+define behavior for Z_C_Travel_U_MAR alias travel
+{
+  use create;
+  use update;
+
+
+  use delete;
+
+  use action set_status_booked;
+
+  use association _Booking { create; }
+}
+
+define behavior for Z_C_Booking_U_MAR alias booking
+{
+  use update;
+  use delete;
+
+  use association _BookSupplement { create; }
+  use association _Travel;
+}
+
+define behavior for Z_C_BookingSupplement_U_Mar alias bookingsupplement
+{
+  use update;
+  use delete;
+
+  use association _Travel;
+}
